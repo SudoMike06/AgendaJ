@@ -1,0 +1,17 @@
+{
+  "Works": [
+    {
+      "title": "hola",
+      "description": "adios",
+      "limitDate": "2002-12-20T01:01:00",
+      "pending": true
+    }
+  ],
+  "Events": [
+    {
+      "title": "Ada Byron",
+      "description": "Concurso de programación",
+      "date": "2025-07-04T17:00:00"
+    }
+  ]
+}
