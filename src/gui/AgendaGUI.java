@@ -570,8 +570,8 @@ public class AgendaGUI {
                         Tarea nueva = new Tarea(titulo, descripcion, fechaLimite, true);
                         agenda.addTarea(nueva);
                         actualizarTablaTareas();
-                        Notificador.mostrarNotificacion("Nueva Tarea", "Has agregado: " + titulo);
-                        //JOptionPane.showMessageDialog(ventana, "Tarea agregada correctamente.");
+                        new Thread(() -> Notificador.mostrarNotificacion("Nueva Tarea", "Has agregado: " + titulo)).start();
+                        JOptionPane.showMessageDialog(ventana, "Tarea agregada correctamente.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(ventana, "Error al crear la tarea: " + ex.getMessage());
                     }
@@ -609,8 +609,8 @@ public class AgendaGUI {
                         Evento nueva = new Evento(titulo, descripcion, fecha);
                         agenda.addEvento(nueva);
                         actualizarTablaEventos();
-                        Notificador.mostrarNotificacion("Nuevo evento", "Has agregado: " + titulo);
-                        //JOptionPane.showMessageDialog(ventana, "Evento agregado correctamente.");
+                        new Thread(() -> Notificador.mostrarNotificacion("Nuevo Evento", "Has agregado: " + titulo)).start();
+                        JOptionPane.showMessageDialog(ventana, "Evento agregado correctamente.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(ventana, "Error al crear el Evento: " + ex.getMessage());
                     }

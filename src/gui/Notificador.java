@@ -10,7 +10,8 @@ public class Notificador {
         }
 
         SystemTray tray = SystemTray.getSystemTray();
-        Image imagen = Toolkit.getDefaultToolkit().createImage("AgendaIcono.jpg");
+        Image imagen = Toolkit.getDefaultToolkit().createImage("C:\\Users\\Miquel\\IdeaProjects\\AgendaInteligente\\AgendaIcono.ico");
+
 
         TrayIcon icono = new TrayIcon(imagen, "Agenda");
         icono.setImageAutoSize(true);
