@@ -434,6 +434,8 @@ public class AgendaGUI {
             System.out.println("No se pudo cargar eventos al iniciar: " + e.getMessage());
         }
 
+        iniciarVerificadorDeNotificaciones();
+
         guardarTareas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
@@ -568,7 +570,8 @@ public class AgendaGUI {
                         Tarea nueva = new Tarea(titulo, descripcion, fechaLimite, true);
                         agenda.addTarea(nueva);
                         actualizarTablaTareas();
-                        JOptionPane.showMessageDialog(ventana, "Tarea agregada correctamente.");
+                        Notificador.mostrarNotificacion("Nueva Tarea", "Has agregado: " + titulo);
+                        //JOptionPane.showMessageDialog(ventana, "Tarea agregada correctamente.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(ventana, "Error al crear la tarea: " + ex.getMessage());
                     }
@@ -606,7 +609,8 @@ public class AgendaGUI {
                         Evento nueva = new Evento(titulo, descripcion, fecha);
                         agenda.addEvento(nueva);
                         actualizarTablaEventos();
-                        JOptionPane.showMessageDialog(ventana, "Evento agregado correctamente.");
+                        Notificador.mostrarNotificacion("Nuevo evento", "Has agregado: " + titulo);
+                        //JOptionPane.showMessageDialog(ventana, "Evento agregado correctamente.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(ventana, "Error al crear el Evento: " + ex.getMessage());
                     }
@@ -621,5 +625,39 @@ public class AgendaGUI {
     private void actualizarTablaEventos() {
         modeloEventos.actualizarDatos(agenda.getListE());
     }
+
+    private void iniciarVerificadorDeNotificaciones() {
+        Thread verificador = new Thread(() -> {
+            while (true) {
+                try {
+                    LocalDateTime ahora = LocalDateTime.now();
+
+                    for (Tarea tarea : agenda.getListT()) {
+                        if (tarea.getPending()) {
+                            long days = java.time.Duration.between(ahora, tarea.getLimitDate()).toDays();
+                            if (days >= 0 && days <= 5) {
+                                Notificador.mostrarNotificacion("Tarea próxima", "Tarea: " + tarea.getTitle() + " vence pronto.");
+                            }
+                        }
+                    }
+
+                    for (Evento evento : agenda.getListE()) {
+                        long days = java.time.Duration.between(ahora, evento.getDate()).toDays();
+                        if (days >= 0 && days <= 5) {
+                            Notificador.mostrarNotificacion("Evento próximo", "Evento: " + evento.getTitle() + " es en breve.");
+                        }
+                    }
+
+                    Thread.sleep(172800000); // Espera 2 dias antes de volver a comprobar
+                } catch (Exception e) {
+                    System.out.println("Error en el verificador de notificaciones: " + e.getMessage());
+                }
+            }
+        });
+
+        verificador.setDaemon(true);
+        verificador.start();
+    }
+
 
 }
